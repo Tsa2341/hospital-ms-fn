@@ -8,7 +8,8 @@
     "build": "npx webpack --mode production",
     "lint": "npx eslint .",
     "format": "npx prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -83,5 +84,17 @@
     "path": false,
     "os": false,
     "v8-to-istanbul": "^9.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "npm run lint",
+      "npm run format",
+      "git add ."
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
