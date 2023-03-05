@@ -8,6 +8,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 dotenv.config();
 
 function prepareBackendUrl(url) {
+  if (!url) {
+    console.error('You need to provide a backend url!');
+    return '';
+  }
   if (url.endsWith('/')) {
     return url.split('').slice(0, -1).join('');
   }

@@ -1,7 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosInstance from '../../utils/axios';
+
+export const setLoggedIn = createAsyncThunk('User/setLoggedIn', async () => {
+  // const result = await axiosInstance.get('/users/'); TODO: implement login funcs
+  // return '';
+});
 
 const initialState = {
-  isLoggedIn: false
+  loading: false,
+  isLoggedIn: false,
+  user: {}
 };
 
 const userSlice = createSlice({
@@ -11,15 +19,25 @@ const userSlice = createSlice({
     getUsersAction: (state, payload) => {
       console.log(state, payload);
     },
-    setLoggedIn: (state, payload) => {
-      state.isLoggedIn = true;
-    },
     setLoggedOut: (state, payload) => {
       state.isLoggedIn = false;
+    }
+  },
+  extraReducers: {
+    // logging in actions
+    [setLoggedIn.pending]: (state) => {
+      state.loading = true;
+    },
+    [setLoggedIn.fulfilled]: (state) => {
+      state.loading = false;
+    },
+    [setLoggedIn.error]: (state, { error }) => {
+      state.loading = false;
+      console.log('User.setLoggedIn.error', error);
     }
   }
 });
 
-export const { getUsersAction, setLoggedIn, setLoggedOut } = userSlice.actions;
+export const { getUsersAction, setLoggedOut } = userSlice.actions;
 
 export default userSlice.reducer;
