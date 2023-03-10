@@ -190,7 +190,7 @@ const HomeNavBar = (props) => {
             ))}
           </Box>
 
-          {isLoggedIn ? (
+          {true ? (
             <Box
               sx={{
                 display: { xs: 'none', sm: 'block' },

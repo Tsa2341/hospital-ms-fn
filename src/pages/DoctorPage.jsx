@@ -65,9 +65,11 @@ const DoctorPage = () => {
                   </Typography>
                   <Typography
                     variant="body1"
-                    className="text-[#050e17] font-bold"
+                    className="text-[#050e17] font-bold line-clamp-3"
                   >
-                    {`${doctorData?.first_name} ${doctorData?.last_name}`}, MD
+                    {`${doctorData?.departments
+                      .map((value) => value.speciality_name)
+                      .join(', ')}`}
                   </Typography>
                 </Box>
                 <br />
