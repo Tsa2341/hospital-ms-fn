@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router';
 import SearchBar from '../components/SearchBar';
 import Loader from '../components/Loader/Loader';
 
-const filterData = (query, data) => {
+export const filterData = (query, data) => {
   if (!query) {
     return data;
   } else {
@@ -42,8 +42,6 @@ const FindDoctor = () => {
 
   const dataFiltered = filterData(searchQuery, filteredData);
 
-  filteredData ? console.log(filteredData[0].doctor_id) : '';
-
   const dispatch = useDispatch();
 
   const nav = useNavigate();
@@ -69,22 +67,24 @@ const FindDoctor = () => {
     setAllSpecialities(true);
   };
 
-  React.useEffect(() => {
-    var lastScrollTop = 0;
-    window.addEventListener(
-      'scroll',
-      () => {
-        var st = window.pageYOffset || document.documentElement.scrollTop;
+  const [isScrolled, setIsScrolled] = React.useState(false);
 
-        if (st > lastScrollTop) {
-          setHideSearchBox(true);
-        } else if (st < lastScrollTop) {
-          setHideSearchBox(true);
-        }
-        lastScrollTop - st <= 0 ? 0 : st;
-      },
-      true
-    );
+  React.useEffect(() => {
+    function handleScroll() {
+      const scrollTop = window.pageYOffset;
+
+      if (scrollTop >= 40) {
+        setIsScrolled(true);
+      } else if (scrollTop <= 200) {
+        setIsScrolled(false);
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (
@@ -93,14 +93,14 @@ const FindDoctor = () => {
       <HomeNavBar />
       <Box
         className={`${
-          !hideSearchBox
+          false
             ? 'hidden transition-all duration-300 ease-linear'
-            : 'flex'
+            : 'inline-block'
         } h-min  w-fit flex flex-col items-start justify-start mx-auto gap-7`}
       >
         <Typography variant="h6">Find a Doctor</Typography>
 
-        <Box className="w-[80vw] mx-auto max-w-[800px] border border-sky-500 rounded-2xl min-h-[100px] p-5">
+        <Box className="w-[90vw] mx-auto max-w-[900px] border border-sky-500 rounded-2xl min-h-[100px] p-5">
           <SearchBar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -193,7 +193,7 @@ const FindDoctor = () => {
             <>
               <Box className="flex flex-col items-end w-[70%] p-0 mx-auto pb-10">
                 <List
-                  className="max-w-[640px] w-[100%] px-10 mx-auto my-10 overflow-auto"
+                  className="max-w-[900px] w-[100%] pr-4 mx-auto my-10 overflow-auto"
                   sx={{ marginX: 'auto', marginTop: 5 }}
                 >
                   {dataFiltered?.map((data, idx) => {
@@ -235,9 +235,12 @@ const FindDoctor = () => {
                     ...(doctorId && {
                       backgroundColor: '#1A4CFF',
                       color: '#fff',
-                      ':hover': { backgroundColor: '#1A4CFA' }
+                      ':hover': {}
                     })
                   }}
+                  className={`${
+                    doctorId && 'bg-[#1A4CFF]'
+                  } capitalize text-white`}
                 >
                   Next
                 </Button>
@@ -258,7 +261,7 @@ const FindDoctor = () => {
             <>
               <Box className="flex flex-col items-end w-fit p-0 mx-auto py-10">
                 <Box
-                  className="max-w-[1024px] w-[100%]  mx-auto"
+                  className="max-w-[900px] w-[100%]  mx-auto"
                   sx={{
                     display: 'grid',
                     gap: '30px',
@@ -279,15 +282,24 @@ const FindDoctor = () => {
                         }}
                       >
                         <Box
-                          sx={{ aspectRatio: '1/1' }}
                           className={`w-full ${
-                            specialityId === data.department_id &&
-                            'border-[2px] border-[#0093df]'
-                          } bg-[#d4d4d4]  rounded-xl`}
-                        ></Box>
+                            specialityId === data.department_id
+                              ? 'border-[2px] border-[#0093df]'
+                              : 'border-[1px] border-[#0093df]'
+                          } bg-[#fefefefe] rounded-xl w-[140px] sm:w-[100px] p-3 mx-auto`}
+                          sx={{
+                            aspectRatio: '1 / 1'
+                          }}
+                        >
+                          <img
+                            src={data.picture}
+                            alt=""
+                            className="w-[150px] aspect-square"
+                          />
+                        </Box>
                         <Typography
                           className="line-clamp-2"
-                          sx={{ fontSize: '15px' }}
+                          sx={{ fontSize: '15px', textAlign: 'center' }}
                         >
                           {data.department_name}
                         </Typography>
