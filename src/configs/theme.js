@@ -24,7 +24,7 @@ const theme = createTheme({
     },
     background: {
       default: '#FFF',
-      paper: '#FAFAFA'
+      // paper: '#FAFAFA'
     },
     action: {
       disabled: '#C0C0C0',

@@ -106,11 +106,19 @@ const routes = createBrowserRouter([
     ]
   },
 
+  // Later redirects
+
   {
     path: '/doctor',
     element: <DoctorPatient />,
     children: []
-  }, // will be sent to its appropriate page shortlly
+  },
+
+  {
+    path: '/test1',
+    element: <PatientProfile />,
+    children: []
+  },
   {
     path: '*',
     element: <Navigate to="/" replace />

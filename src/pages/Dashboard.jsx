@@ -79,10 +79,13 @@ const LeftSideList = ({ toggleLeftSideBar }) => {
   return (
     <>
       <Box
-        className="relative w-full h-full border-r border-[#0093df] overflow-auto flex flex-col bg-[#fff] "
+        className="relative w-full h-full border-r min-h-16 border-[#0093df] overflow-auto flex flex-col bg-[#fff] "
         component="div"
       >
-        <Box className="h-[64px]" sx={{ display: { md: 'none', xs: 'block' } }}>
+        <Box
+          className="h-[64px] min-h-16"
+          sx={{ display: { md: 'none', xs: 'block' } }}
+        >
           <IconButton
             onClick={toggleLeftSideBar}
             sx={{
@@ -93,7 +96,7 @@ const LeftSideList = ({ toggleLeftSideBar }) => {
           </IconButton>
         </Box>
         <Divider sx={{ borderColor: '#0093df' }} />
-        <Box className="h-[calc(100%-64px)] bg-pink-500 flex flex-col justify-between">
+        <Box className="h-[calc(100%-64px)] min-h-[580px] overflow-auto flex flex-col justify-between">
           <Box className="h-[55%]">
             <List>
               {listItems.map((listItem, index) => (
@@ -257,10 +260,11 @@ const Dashboard = () => {
   return (
     <Box className="flex flex-col w-full h-full overflowy-hidden">
       <Box
-        className="flex flex-row items-center justify-between border-b border-primary"
+        className="flex flex-row items-center justify-between border-b border-primary min-h-16"
         sx={{
           width: '100%',
-          height: '64px'
+          height: '64px',
+          minHeight: '64px'
         }}
       >
         <Box className="flex flex-row items-center">
