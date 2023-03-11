@@ -1,21 +1,18 @@
-import React from 'react';
-import PatientProfileNavigation from './PatientProfileNavigation';
 import {
   Box,
   Button,
-  Typography,
-  Paper,
-  Grid,
-  TextField,
   FormControl,
+  IconButton,
+  InputAdornment,
   InputLabel,
   OutlinedInput,
-  InputAdornment,
-  IconButton
+  TextField,
+  Typography
 } from '@mui/material';
-import HomeNavBar from '../HomeNavBar';
-import { FiUser } from 'react-icons/fi';
+import React from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { FiUser } from 'react-icons/fi';
+import PatientProfileNavigation from './PatientProfileNavigation';
 
 const AccountInfo = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -26,7 +23,7 @@ const AccountInfo = () => {
   };
   return (
     <div>
-      <Box className="w-[80%] max-w-[1200px] mx-auto">
+      <Box className="w-full">
         <PatientProfileNavigation />
 
         <Box className="mt-8 mb-5">

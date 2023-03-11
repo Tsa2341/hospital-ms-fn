@@ -16,7 +16,7 @@ import {
 const ExpectedAppointment = () => {
   return (
     <div>
-      <Box className="w-full px-32 md:px-10 mx-auto max-w-[1200px]">
+      <Box className="w-full">
         <PatientAppointmentNavigation />
         <TableContainer component={Paper}>
           <Table

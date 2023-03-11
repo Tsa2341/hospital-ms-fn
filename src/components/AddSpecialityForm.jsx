@@ -20,7 +20,6 @@ import {
   Box
 } from '@mui/material';
 import { registerDoctor } from '../redux/reducers/doctor.reducer';
-import DashboardSideBar from './DashboardSideBar';
 
 const schema = yup.object().shape({
   department_name: yup.string().required(),
@@ -105,7 +104,6 @@ const AddSpecialityForm = () => {
 
   return (
     <Box>
-      {/* <DashboardSideBar /> */}
       <Box className="pt-20 w-[90%] max-w-[900px] mx-auto lg:pl-0 relative pb-10 min-h-[70vh]">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Typography

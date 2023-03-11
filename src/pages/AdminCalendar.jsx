@@ -29,7 +29,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { days } from '../utils/dummyData';
 import { createSchedule } from '../redux/reducers/schedule.reducer';
-import DashboardSidebar from '../components/DashboardSideBar';
 import { BsPlusCircle } from 'react-icons/bs';
 
 const schema = yup.object().shape({
@@ -116,7 +115,6 @@ function AdminCalendar() {
 
   return (
     <Box className="flex flex-row items-start pr-[250px] ">
-      <DashboardSidebar />
       <Box className="sm:p-4 pt-16 px-8 flex flex-col w-[100%] sm:gap-0">
         <Stack
           direction="row"
