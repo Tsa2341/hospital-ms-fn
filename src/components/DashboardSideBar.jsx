@@ -92,7 +92,7 @@ const DashboardSideBar = () => {
   };
   const RightSideList = () => (
     <Box
-      className={`w-[220px] border-l border-[#0093df] overflow-auto flex flex-col fixed bg-[#fff]  top-[60px] lg:top-0 right-0 bottom-0 z-20`}
+      className={`w-[220px] border-l border-[#0093df] overflow-auto flex flex-col fixed bg-[#fff]  top-[64px] lg:top-0 right-0 bottom-0 z-20`}
       component="div"
     >
       <Box
@@ -141,7 +141,7 @@ const DashboardSideBar = () => {
 
   const LeftSideList = () => (
     <Box
-      className={`w-[220px] border-r border-[#0093df] overflow-auto flex flex-col fixed bg-[#fff]  top-[60px] lg:top-0 left-0 bottom-0 z-20`}
+      className={`w-[220px] border-r border-[#0093df] overflow-auto flex flex-col fixed bg-[#fff]  top-[64px] lg:top-0 left-0 bottom-0 z-20`}
       component="div"
     >
       <Box

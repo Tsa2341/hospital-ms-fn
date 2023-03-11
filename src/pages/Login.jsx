@@ -21,8 +21,6 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
-  // const userData = useSelector((state) => state.user);
-  const [userType, setUserType] = React.useState(null);
   const nav = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const {
@@ -39,50 +37,6 @@ const Login = () => {
     return <Navigate to="/dashboard" />;
   }
 
-  React.useEffect(() => {
-    dispatch(getUsersAction());
-  }, []);
-
-  React.useEffect(() => {
-    setUserType(userData?.loginData?.data?.data?.user);
-  }, [userData]);
-
-  // const userType = userData?.loginData?.data?.data?.user;
-  const status = userData?.loginData?.status;
-  console.log(userData, '!!!!!!!!!!!!!!');
-  console.log(userType, '!!!!!!!TYPE!!!!!!!');
-
-  // const onSubmit = ({ email, password }) => {
-  //   dispatch(
-  //     loginUser({
-  //       email,
-  //       password
-  //     })
-  //   );
-    // userInfo ? nav('/patient') : doctorInfo ? nav('/doctor') : nav('/');
-
-    console.log(userData, '!!!!!!!!!!!!!!');
-    console.log(userType, '@@@@');
-
-    console.log(userType, '####');
-
-    // status === 201
-    //   ? reset({
-    //       email: '',
-    //       password: ''
-    //     })
-    //   : null;
-  };
-
-  if (userType?.role_id === 3) {
-    nav('/patient');
-  }
-  if (userType?.role_id === 2) {
-    nav('/doctor');
-  }
-  if (userType?.role_id === 1) {
-    nav('/dashboard');
-  }
   const handleBack = () => {
     nav(-1);
   };
@@ -116,7 +70,7 @@ const Login = () => {
 
   return (
     <>
-      <Box className="flex items-center justify-center min-h-screen h-full w-full">
+      <Box className="flex items-center justify-center min-h-screen h-full w-full sm:px-2">
         <Container
           component="main"
           maxWidth="xs"
@@ -124,9 +78,9 @@ const Login = () => {
             border: '1px solid #797979',
             borderRadius: '10px',
             py: 8,
-            position: 'relative',
-            maxWidth: '100px'
+            position: 'relative'
           }}
+          className="max-w-[380px] px-6 sm:px-2"
         >
           <CssBaseline />
           <Box
@@ -228,7 +182,7 @@ const Login = () => {
         </Container>
       </Box>
     </>
-  )
+  );
 };
 
 export default Login;

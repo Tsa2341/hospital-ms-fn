@@ -93,7 +93,7 @@ const LeftSideList = ({ toggleLeftSideBar }) => {
           </IconButton>
         </Box>
         <Divider sx={{ borderColor: '#0093df' }} />
-        <Box className="h-[calc(100%-64px)] flex flex-col justify-between">
+        <Box className="h-[calc(100%-64px)] bg-pink-500 flex flex-col justify-between">
           <Box className="h-[55%]">
             <List>
               {listItems.map((listItem, index) => (
@@ -102,6 +102,7 @@ const LeftSideList = ({ toggleLeftSideBar }) => {
                   aria-controls={
                     openMenu && index === 4 ? 'demo-positioned-menu' : undefined
                   }
+                  className="cursor-pointer hover:bg-[#caedff] hover:text-primary"
                   aria-haspopup="true"
                   aria-expanded={openMenu && index === 4 ? 'true' : undefined}
                   onClick={index === 4 ? handleClick : undefined}
@@ -116,7 +117,7 @@ const LeftSideList = ({ toggleLeftSideBar }) => {
           <Box className="h-[45%]  border-t border-[#0093df]">
             <List>
               {accItems.map((listItem) => (
-                <ListItem>
+                <ListItem className="cursor-pointer hover:bg-[#caedff] hover:text-primary">
                   <ListItemIcon>{listItem.listIcon}</ListItemIcon>
                   <ListItemText primary={listItem.listText} />
                 </ListItem>
@@ -125,6 +126,7 @@ const LeftSideList = ({ toggleLeftSideBar }) => {
                 onClick={() => {
                   localStorage.removeItem('userLoginData');
                 }}
+                className="cursor-pointer hover:bg-[#caedff] hover:text-primary"
               >
                 <ListItemIcon>
                   <FiLogOut className="text-[20px]" />
@@ -255,10 +257,10 @@ const Dashboard = () => {
   return (
     <Box className="flex flex-col w-full h-full overflowy-hidden">
       <Box
-        className="flex flex-row items-center justify-between"
+        className="flex flex-row items-center justify-between border-b border-primary"
         sx={{
           width: '100%',
-          height: '98px'
+          height: '64px'
         }}
       >
         <Box className="flex flex-row items-center">
@@ -288,7 +290,7 @@ const Dashboard = () => {
                   position: 'absolute',
                   backgroundColor: '#9b9b9b2d',
                   color: '#000',
-                  top: '60px',
+                  top: '64px',
                   right: '16px',
                   display: { md: 'none', xs: 'block' }
                 }}

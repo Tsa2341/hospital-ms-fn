@@ -21,7 +21,7 @@ const Form = () => {
       <Box
         className={`${
           status === 2 ? 'max-w-[1400px]' : 'max-w-[800px]'
-        } mx-auto w-[80%] md:w-[98%]`}
+        } mx-auto w-[80%] md:w-[98%] pb-16`}
       >
         <Paper
           sx={{
@@ -33,6 +33,7 @@ const Form = () => {
             borderRadius: { md: 5, xs: 1 },
             position: 'relative'
           }}
+          className={`${status === 2 && 'mt-1'}`}
         >
           <IconButton
             onClick={() => {

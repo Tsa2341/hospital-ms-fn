@@ -149,8 +149,8 @@ const DoctorSignupForm = () => {
 
   return (
     <Box>
-      <DashboardSideBar />
-      <Box className="pl-[220px] pt-20 w-[90%] mx-auto lg:pl-0 relative pb-10 mb-10">
+      {/* <DashboardSideBar /> */}
+      <Box className=" pt-20 w-[90%] mx-auto lg:pl-0 relative pb-10 mb-10">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Typography
             variant="h6"
