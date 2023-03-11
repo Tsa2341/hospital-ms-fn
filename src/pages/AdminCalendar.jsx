@@ -1,33 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
-  Stack,
-  Typography,
-  TextField,
-  Grid,
-  Paper,
   Button,
+  Checkbox,
   FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
   FormHelperText,
-  MenuItem,
+  Grid,
+  InputLabel,
   ListItemText,
-  Checkbox
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Stack,
+  TextField,
+  Typography
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import BackButton from '../components/BackButton';
+import React, { useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { BsPlusCircle } from 'react-icons/bs';
+import { useDispatch, useSelector } from 'react-redux';
+import * as yup from 'yup';
 import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
-import { useSelector, useDispatch } from 'react-redux';
-import { getDoctorList } from '../redux/reducers/doctor.reducer';
-import { filterData } from './FindDoctor';
 import SmallSearchBar from '../components/SmallSearchBar';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { days } from '../utils/dummyData';
+import { getDoctorList } from '../redux/reducers/doctor.reducer';
 import { createSchedule } from '../redux/reducers/schedule.reducer';
 import { BsPlusCircle } from 'react-icons/bs';
 
