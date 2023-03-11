@@ -25,7 +25,6 @@ import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearS
 import SmallSearchBar from '../components/SmallSearchBar';
 import { getDoctorList } from '../redux/reducers/doctor.reducer';
 import { createSchedule } from '../redux/reducers/schedule.reducer';
-import { BsPlusCircle } from 'react-icons/bs';
 
 const schema = yup.object().shape({
   doctor_id: yup.string(),
@@ -268,12 +267,12 @@ function AdminCalendar() {
                       input={<OutlinedInput label="Work Days" />}
                       renderValue={(selected) => selected.join(', ')}
                     >
-                      {days.map((name, idx) => (
+                      {/* {days.map((name, idx) => (
                         <MenuItem key={idx} value={name}>
                           <Checkbox checked={dayName.indexOf(name) > -1} />
                           <ListItemText primary={name} />
                         </MenuItem>
-                      ))}
+                      ))} */}
                     </Select>
                   </FormControl>
                 )}
