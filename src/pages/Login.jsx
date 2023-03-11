@@ -116,7 +116,7 @@ const Login = () => {
 
   return (
     <>
-      <Box className="absolute w-fit max-w-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+      <Box className="flex items-center justify-center min-h-screen h-full w-full">
         <Container
           component="main"
           maxWidth="xs"
@@ -124,7 +124,8 @@ const Login = () => {
             border: '1px solid #797979',
             borderRadius: '10px',
             py: 8,
-            position: 'relative'
+            position: 'relative',
+            maxWidth: '100px'
           }}
         >
           <CssBaseline />

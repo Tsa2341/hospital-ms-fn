@@ -17,48 +17,21 @@ import svg7 from '../../public/assets/Vector-6.svg';
 import svg8 from '../../public/assets/Vector-7.svg';
 import { useNavigate } from 'react-router';
 
-const LandingPage = () => {
-  const nav = useNavigate();
-  return (
-    <Box className="bg-white min-h-screen">
-      <HomeNavBar />
-      <div className="w-[82%] xl:w-[100%] mx-auto bg-white px-4">
-        <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-0">
-          <div className="w-[45%] xl:w-full flex flex-col items-baseline lg:items-center">
-            <div
-              className="text-secondary font-bold text-6xl md:text-4xl leading-[1.1]"
-              style={{
-                textShadow:
-                  '0 0 10px #214add25, 0 0 20px #214add25, 0 0 30px #214add25, 0 0 40px #214add25,0 0 50px #214add25'
-              }}
-            >
-              We help patients <br /> live a healthy,
-              <br /> longer life
-            </div>
-            <div className="text-[#081c63b7] my-5">
-              Our skilled doctors have tremendous experience <br /> with wide
-              range of disease to serve the needs of <br /> our patients
-            </div>
-            <div className="w-fit max-w-[300px] mb-10 hidden md:inline-block">
-              <img src={img1} alt="" />
-            </div>
-            <div className="flex items-center  xl:flex-col xl:justify-center gap-3 w-[100%]">
-              <button
-                type="button"
-                className="text-white bg-[#214ADD] hover:bg-[#456dff] w-[50%] xl:w-[90%] rounded-2xl text-[18px] min-w-[178px] max-w-[280px]  py-3"
-              >
-                Make appointment
-              </button>
-              <button
-                onClick={() => {
-                  nav('/signup');
-                }}
-                type="button"
-                className="text-[#214ADD] hover:bg-[#d2dbff] hover:border-white w-[50%]  xl:w-[90%] border border-[#214ADD] bg-[#ffffff] rounded-2xl text-[18px] min-w-[178px] max-w-[280px]  py-3"
-              >
-                Registration
-              </button>
-            </div>
+const LandingPage = () => (
+  <Box className="bg-white min-h-screen">
+    <HomeNavBar />
+    <div className="w-[100%] max-w-[1400px] px-32 sm:px-8  mx-auto bg-white">
+      <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-0">
+        <div className="w-[45%] xl:w-full flex flex-col items-baseline lg:items-center">
+          <div
+            className="text-secondary font-bold text-6xl md:text-4xl leading-[1.1]"
+            style={{
+              textShadow:
+                '0 0 10px #214add25, 0 0 20px #214add25, 0 0 30px #214add25, 0 0 40px #214add25,0 0 50px #214add25'
+            }}
+          >
+            We help patients <br /> live a healthy,
+            <br /> longer life
           </div>
           <div className="w-[40%] lg:max-w-md xl:w-full md:hidden">
             <img src={img1} alt="" />
@@ -237,11 +210,49 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
-        </section>
-      </div>
-      <Footer />
-    </Box>
-  );
-};
+          <div>
+          <div className="">
+            <div className="border-[2px] w-[250px] mx-auto border-[#0800AF] p-6 pb-2 rounded-xl">
+              <img
+                src={img5}
+                alt=""
+                className="border border-emerald-500 rounded-lg"
+              />
+              <div className="text-center text-[16px] mt-2">
+                <h1 className="font-bold">Dr. Maria Bolatova</h1>
+                <p className="text-gray-700">cardiologist</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="mt-[100px]">
+        <h1 className="text-primary text-center text-2xl font-medium mb-3 uppercase">
+          why choose us
+        </h1>
+        <h1 className="text-secondary text-center text-4xl mb-10 font-semibold">
+          why you should choose us{' '}
+        </h1>
+        <div className="grid grid-cols-3 sm:grid-cols-2 mb-10 gap-4">
+          <div>
+            <h1 className="text-secondary font-bold mb-5">Safety</h1>
+            <p>
+              All medical services in our clinic are performed by experienced
+              staff using modern medical equipment
+            </p>
+          </div>
+          <div>
+            <h1 className="text-secondary font-bold mb-5">Comfort</h1>
+            <p>
+              Attentive and polite staff, large parking area, spacious waiting
+              and receiving areas.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <Footer />
+  </Box>
+);
 
 export default LandingPage;

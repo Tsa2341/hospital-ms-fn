@@ -33,7 +33,7 @@ const PatientInfo = () => {
           </Box>
         )}
         {!patient?.loading && (
-          <Box className="">
+          <Box className="pb-16">
             <PatientProfileNavigation />
             <Box sx={{ width: { md: '50%' } }}>
               <Grid
@@ -144,7 +144,7 @@ const PatientInfo = () => {
                     </Typography>
                   </Item>
                 </Grid>
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <Item>
                     {' '}
                     <Typography variant="body2">Address 1</Typography>
@@ -157,7 +157,7 @@ const PatientInfo = () => {
                       {patientData?.address_2}
                     </Typography>
                   </Item>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={6}>
                   <Item>
                     {' '}
@@ -209,7 +209,7 @@ const PatientInfo = () => {
                 width: '120px',
                 display: 'block',
                 color: '#1A4CFF',
-                border: '2px solid #1A4CFF',
+                border: '1px solid #1A4CFF',
                 borderRadius: '20px',
                 marginX: 'auto',
                 ':hover': { backgroundColor: '#a2ccff' }

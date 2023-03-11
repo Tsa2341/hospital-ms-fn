@@ -191,7 +191,7 @@ const FindDoctor = () => {
             <>
               <Box className="flex flex-col items-end w-full p-0 mx-auto pb-10">
                 <List
-                  className="max-w-[900px] w-[100%] pr-4 mx-auto my-10 overflow-auto"
+                  className="max-w-[900px] w-[100%] h-[80vh] pr-4 mx-auto my-10 overflow-auto"
                   sx={{ marginX: 'auto', marginTop: 5 }}
                 >
                   {dataFiltered?.map((data, idx) => {

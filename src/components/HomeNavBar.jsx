@@ -17,14 +17,37 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
+import { fontWeight } from '@mui/system';
 
 const navItems = ['Home', 'About Us', 'Find a Doctor'];
 const userItems = ['Login', 'Sign up'];
 
 const HomeNavBar = (props) => {
-  const { window } = props;
+  // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isLoggedIn = !!localStorage.getItem('userLoginData');
+  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const [onHome, setOnHome] = React.useState(true);
+  const [onAbout, setOnAbout] = React.useState(false);
+  const [onfindDoc, setOnfindDoc] = React.useState(false);
+
+  console.log({ onHome, onAbout, onfindDoc });
+
+  const url = window.location.href;
+
+  React.useEffect(() => {
+    if (url.includes('about')) {
+      setOnHome(false);
+      setOnAbout(true);
+      setOnfindDoc(false);
+    }
+    if (url.includes('find_doctor')) {
+      setOnHome(false);
+      setOnAbout(false);
+      setOnfindDoc(true);
+    }
+    // setOnHome(true);
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -62,7 +85,25 @@ const HomeNavBar = (props) => {
             }}
           >
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+              <ListItemText
+                primary={item}
+                sx={{
+                  textDecoration: 'none',
+                  ...(onHome &&
+                    idx === 0 && {
+                      textDecoration: 'underline'
+                    }),
+                  ...(onAbout &&
+                    idx === 1 && {
+                      textDecoration: 'underline'
+                    }),
+                  ...(onfindDoc &&
+                    idx === 2 && {
+                      textDecoration: 'underline'
+                    }),
+                  fontWeight: '700'
+                }}
+              />
             </ListItemButton>
             <Divider />
           </ListItem>
@@ -122,7 +163,8 @@ const HomeNavBar = (props) => {
                     textAlign: 'center',
                     ...(idx === 1 && {
                       border: '1px solid #1A4CFF',
-                      borderRadius: '10px'
+                      borderRadius: '10px',
+                      fontSize: {}
                     })
                   }}
                   onClick={() => {
@@ -141,10 +183,10 @@ const HomeNavBar = (props) => {
   );
 
   const container =
-    window !== undefined ? () => window().document.body : undefined;
+    props.window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex', fontSize: '20px' }}>
+    <Box sx={{ display: 'flex', fontSize: { md: '17px', xs: '14px' } }}>
       <CssBaseline />
       <AppBar component="nav" sx={{ backgroundColor: '#fff' }}>
         <Toolbar
@@ -168,12 +210,13 @@ const HomeNavBar = (props) => {
           </Typography>
           <Box
             sx={{
-              display: { xs: 'none', sm: 'flex', gap: 2 },
-              fontSize: '18px'
+              display: { xs: 'none', sm: 'flex' },
+              gap: { sm: 0, md: 2 },
+              fontSize: { md: '17px', xs: '14px' }
             }}
           >
             {navItems.map((item, idx) => (
-              <Button
+              <Typography
                 key={item}
                 color="primary"
                 onClick={() => {
@@ -183,30 +226,59 @@ const HomeNavBar = (props) => {
                     ? nav('/about')
                     : nav('/find_doctor');
                 }}
-                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
+                sx={{
+                  color: '#1A4CFF',
+                  cursor: 'pointer',
+                  fontSize: { md: '17px', xs: '14px' },
+                  mx: { md: '5px', xs: '4px' },
+                  textDecoration: 'none',
+                  ...(onHome &&
+                    idx === 0 && {
+                      fontWeight: '700',
+                      borderBottom: '2px solid #1A4CFF'
+                    }),
+                  ...(onAbout &&
+                    idx === 1 && {
+                      fontWeight: '700',
+                      borderBottom: '2px solid #1A4CFF'
+                    }),
+                  ...(onfindDoc &&
+                    idx === 2 && {
+                      fontWeight: '700',
+                      borderBottom: '2px solid #1A4CFF'
+                    })
+                }}
               >
                 {item}
-              </Button>
+              </Typography>
             ))}
           </Box>
 
-          {true ? (
+          {isLoggedIn ? (
             <Box
               sx={{
                 display: { xs: 'none', sm: 'block' },
-                fontSize: '18px',
+                fontSize: { md: '17px', xs: '14px' },
                 mx: 2
               }}
             >
               <Button
                 color="primary"
-                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
+                sx={{
+                  color: '#1A4CFF',
+                  fontSize: { md: '17px', xs: '14px' },
+                  mx: { md: '5px', xs: '4px' }
+                }}
               >
                 <FiIcons.FiSearch />
               </Button>
               <Button
                 color="primary"
-                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
+                sx={{
+                  color: '#1A4CFF',
+                  fontSize: { md: '17px', xs: '14px' },
+                  mx: { md: '5px', xs: '4px' }
+                }}
                 onClick={() => {
                   nav('/dashboard/patient/appointments');
                 }}
@@ -215,7 +287,11 @@ const HomeNavBar = (props) => {
               </Button>
               <Button
                 color="primary"
-                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
+                sx={{
+                  color: '#1A4CFF',
+                  fontSize: { md: '17px', xs: '14px' },
+                  mx: { md: '5px', xs: '4px' }
+                }}
                 onClick={() => {
                   nav('/dashboard/patient');
                 }}
@@ -225,14 +301,17 @@ const HomeNavBar = (props) => {
             </Box>
           ) : (
             <Box
-              sx={{ display: { xs: 'none', sm: 'block' }, fontSize: '18px' }}
+              sx={{
+                display: { xs: 'none', sm: 'block' },
+                fontSize: { md: '17px', xs: '14px' }
+              }}
             >
               {userItems.map((item, idx) => (
                 <Button
                   key={item}
                   color="primary"
                   sx={{
-                    fontSize: '18px',
+                    fontSize: { md: '17px', xs: '14px' },
                     mx: 2,
                     ...(idx === 1 && {
                       border: '1px solid #1A4CFF'
