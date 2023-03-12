@@ -16,9 +16,9 @@ import {
 const PreviousAppointment = () => {
   return (
     <div>
-      <Box className="w-[80%] mx-auto max-w-[1200px]">
+      <Box className="w-full px-32 md:px-10 mx-auto max-w-[1200px]">
         <PatientAppointmentNavigation />
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} elevation={0}>
           <Table
             sx={{ minWidth: 650, backgroundColor: '#fff' }}
             aria-label="simple table"
