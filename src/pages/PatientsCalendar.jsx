@@ -17,40 +17,35 @@ import {
 import {
   addMinutes,
   format,
-  getDay,
-  getDaysInMonth,
+  getHours,
   getMonth,
-  isEqual,
+  getYear,
+  isFuture,
+  isPast,
+  isToday,
   subMinutes
 } from 'date-fns';
-import _ from 'lodash';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FiChevronLeft } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import CreateAppointmentModal from '../components/Appointment/CreateAppointmentModal';
 import BackButton from '../components/BackButton';
-import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
 import DoctorAppointmentsCalendar from '../components/Calendar/DoctorAppointmentsCalendar';
-import {
-  getDoctorAppointments,
-  selectAppointmentsById
-} from '../redux/reducers/appointment.reducer';
-import { setSelectedDate } from '../redux/reducers/calendar.reducer';
+import HomeNavBar from '../components/HomeNavBar';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
-import {
-  getDoctorWorkDays,
-  selectWorkDaysDoctors
-} from '../redux/reducers/workDays.reducer';
+import { getOnePatient } from '../redux/reducers/patient.reducer';
 import {
   setSelectedDoctorDataRedux,
   setSelectedPatientDataRedux,
   setSelectedWorkDay
 } from '../redux/reducers/user.reducer';
-import { getOnePatient } from '../redux/reducers/patient.reducer';
-import HomeNavBar from '../components/HomeNavBar';
+import {
+  getDoctorWorkDays,
+  selectWorkDaysDoctors
+} from '../redux/reducers/workDays.reducer';
 
 function PatientsCalendar() {
   const dispatch = useDispatch();
@@ -60,11 +55,9 @@ function PatientsCalendar() {
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
   const [openRightSideBar, setOpenRightSideBar] = useState(null);
-  const [workdays, setWorkdays] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [slots, setSlots] = useState(null);
-  console.log(slots, 'slots ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,');
   // const selectedDate = useSelector((state) => state.calendar.selectedDate);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const workDays = useSelector(
@@ -72,7 +65,6 @@ function PatientsCalendar() {
   );
   const doctor = useSelector((state) => state.doctor);
   const patient = useSelector((state) => state.patient);
-  const days = useSelector((state) => state.workDays);
 
   const doctorData = doctor?.single_data?.data;
   const patientData = patient?.single_data?.data;
@@ -84,13 +76,15 @@ function PatientsCalendar() {
     setSelectedDate(date);
   };
 
-  const dates = workdays?.map((values) => values.date);
-
-  const selectedWorkDay = workdays?.filter((values) => {
+  const selectedWorkDay = workDays?.filter((values) => {
     return values.date === selectedDate;
   });
 
   function addSubstractTime(hour, minute, minutesToAdd, operation) {
+    hour = parseInt(hour, 10);
+    minute = parseInt(minute, 10);
+    minutesToAdd = parseInt(minutesToAdd, 10);
+
     const date = new Date();
     date.setHours(hour);
     date.setMinutes(minute);
@@ -103,129 +97,86 @@ function PatientsCalendar() {
 
   useEffect(() => {
     const workDaysSlots = {};
-
-    if (workDays) {
-      const workDay = workDays[0];
-      if (!workDay) {
-        return;
-      }
+    workDays?.forEach((workDay) => {
       const slots = [];
       const { from, to, date } = workDay;
-      const duration = workDay.schedule.appointment_duration;
-      const { appointments } = workDay.schedule;
-      let taken = [];
-      appointments.forEach((appointment) => {
-        taken.push(appointment.appointment_period);
-      });
-      taken = taken.sort((a, b) => (a < b ? -1 : 1));
-      console.log(taken, 'taken');
-      let [fromHour, fromMinute] = from.trim().split(':');
-      let [toHour, toMinute] = to.trim().split(':');
-      fromHour = parseInt(fromHour, 10);
-      fromMinute = parseInt(fromMinute, 10);
-      toHour = parseInt(toHour, 10);
-      toMinute = parseInt(toMinute, 10);
+      if (isToday(new Date(date)) || isFuture(new Date(date))) {
+        const duration = workDay.schedule.appointment_duration;
+        const { appointments } = workDay.schedule;
+        let taken = [];
+        appointments.forEach((appointment) => {
+          if (appointment.is_canceled) return;
+          taken.push(appointment.appointment_period);
+        });
+        taken = taken.sort((a, b) => (a < b ? -1 : 1));
+        const [fromHour, fromMinute] = from.trim().split(':');
+        const [toHour, toMinute] = to.trim().split(':');
 
-      const lastSlot = `${addSubstractTime(
-        toHour,
-        toMinute,
-        duration,
-        's'
-      )} - ${toHour}:${toMinute}`;
-      let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
-        fromHour,
-        fromMinute,
-        duration
-      )}`;
-
-      console.log(lastSlot, currentSlot, 'lastSlot, currentSlot');
-
-      while (true) {
-        slots.push(currentSlot);
-        if (currentSlot === lastSlot) {
-          break;
-        }
-        if (currentSlot === '17:00') {
-          currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
-        } else {
-          const slotLastPart = currentSlot.split('-')[1].trim();
-          const splitLastSlotPart = slotLastPart.split(':');
-          currentSlot = `${currentSlot} - ${addSubstractTime(
-            splitLastSlotPart[0],
-            splitLastSlotPart[1],
+        const lastSlot = `${addSubstractTime(
+          toHour,
+          toMinute,
+          duration,
+          's'
+        )} - ${toHour}:${toMinute}`;
+        let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
+          fromHour,
+          fromMinute,
+          duration
+        )}`;
+        if (isToday(new Date(date))) {
+          const Hour = getHours(new Date());
+          currentSlot = `${Hour + 1}:00 - ${addSubstractTime(
+            Hour + 1,
+            '00',
             duration
           )}`;
         }
+
+        while (true) {
+          if (currentSlot >= lastSlot) {
+            break;
+          }
+          if (currentSlot === taken[0]) {
+            taken.shift();
+          } else {
+            slots.push(currentSlot);
+          }
+          if (currentSlot === '17:00') {
+            currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
+          } else {
+            const slotLastPart = currentSlot.split('-')[1].trim();
+            const splitLastSlotPart = slotLastPart.split(':');
+            currentSlot = `${slotLastPart} - ${addSubstractTime(
+              splitLastSlotPart[0],
+              splitLastSlotPart[1],
+              duration
+            )}`;
+          }
+        }
+        workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
       }
-      workDaysSlots[format(date, 'yyyy-MM-dd')] = slots;
-    }
-
-    // workDaysState?.workDays?.forEach((workDay) => {
-    //   const slots = [];
-    //   const { from, to, date } = workDay;
-    //   const duration = workDay.schedule.appointment_duration;
-    //   const { appointments } = workDay.schedule;
-    //   let taken = [];
-    //   appointments.forEach((appointment) => {
-    //     taken.push(appointment.appointment_period);
-    //   });
-    //   taken = taken.sort((a, b) => (a < b ? -1 : 1));
-    //   console.log(taken, 'taken');
-    //   let [fromHour, fromMinute] = from.trim().split(':');
-    //   let [toHour, toMinute] = to.trim().split(':');
-    //   fromHour = parseInt(fromHour, 10);
-    //   fromMinute = parseInt(fromMinute, 10);
-    //   toHour = parseInt(toHour, 10);
-    //   toMinute = parseInt(toMinute, 10);
-
-    //   const lastSlot = `${addSubstractTime(
-    //     toHour,
-    //     toMinute,
-    //     duration,
-    //     's'
-    //   )} - ${toHour}:${toMinute}`;
-    //   let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
-    //     fromHour,
-    //     fromMinute,
-    //     duration
-    //   )}`;
-
-    //   while (true) {
-    //     slots.push(currentSlot);
-    //     if (currentSlot === lastSlot) {
-    //       break;
-    //     }
-    //     if (currentSlot === '17:00') {
-    //       currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
-    //     } else {
-    //       const slotLastPart = currentSlot.split('-')[1].trim();
-    //       const splitLastSlotPart = slotLastPart.split(':');
-    //       currentSlot = `${currentSlot} - ${addSubstractTime(
-    //         splitLastSlotPart[0],
-    //         splitLastSlotPart[1],
-    //         duration
-    //       )}`;
-    //     }
-    //   }
-    //   workDaysSlots[format(date, 'yyyy-MM-dd')] = slots;
-    // });
+    });
     setSlots(workDaysSlots);
   }, [workDays]);
   useEffect(() => {
-    setLoading(true);
     dispatch(getOneDoctor(doctorId));
     dispatch(getOnePatient(clientId));
-    dispatch(getDoctorWorkDays({ id: doctorId })).then(({ error }) => {
+  }, [doctorId]);
+  useEffect(() => {
+    setLoading(true);
+    dispatch(
+      getDoctorWorkDays({
+        id: doctorId,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
       if (error) {
         toast.error(error.message);
       }
       setLoading(false);
     });
-  }, [doctorId]);
-  useEffect(() => {}, [doctorId]);
-  useEffect(() => {
-    setWorkdays(days?.entities[doctorId]?.workDays);
-  }, [days, doctorId]);
+  }, [doctorId, viewDate]);
   useEffect(() => {
     dispatch(setSelectedDoctorDataRedux(doctorData));
     dispatch(setSelectedPatientDataRedux(patientData));
@@ -280,48 +231,52 @@ function PatientsCalendar() {
           <Box className="sm:px-0 px-20">
             <DoctorAppointmentsCalendar
               ref={calendarRef}
-              {...{ handleDayClick, selectedDate, loading, viewDate, workdays }}
+              {...{
+                handleDayClick,
+                selectedDate,
+                loading,
+                viewDate,
+                slots
+              }}
             />
           </Box>
         </Box>
-        <Drawer
-          open={openRightSideBar}
-          anchor="right"
-          variant={isMobile ? 'temporary' : 'permanent'}
-          onClose={() => {
-            setOpenRightSideBar(false);
-          }}
-          sx={{
-            '& .MuiDrawer-paper': {
-              maxWidth: '250px',
-              width: '100%'
-            }
-          }}
-          classes={{
-            paper: isMobile ? 'absolute' : 'relative'
-          }}
-          ModalProps={{
-            keepMounted: false
-          }}
-          className="transition duration-150 ease-in-out"
-        >
-          <CalendarRightSideBar {...{ loading }} />
-        </Drawer>
+        {selectedDate && slots && (
+          <Drawer
+            open={openRightSideBar}
+            anchor="right"
+            variant={isMobile ? 'temporary' : 'permanent'}
+            onClose={() => {
+              setOpenRightSideBar(false);
+            }}
+            sx={{
+              '& .MuiDrawer-paper': {
+                maxWidth: '250px',
+                width: '100%'
+              }
+            }}
+            classes={{
+              paper: isMobile ? 'absolute' : 'relative'
+            }}
+            ModalProps={{
+              keepMounted: false
+            }}
+            className="transition duration-150 ease-in-out"
+          >
+            <CalendarRightSideBar {...{ loading, slots, viewDate }} />
+          </Drawer>
+        )}
       </Box>
     </HomeNavBar>
   );
 }
 
-const CalendarRightSideBar = ({ loading }) => {
-  const appointmentHours = [
-    '09:00 - 09:30',
-    '09:00 - 09:31',
-    '09:00 - 09:32',
-    '09:00 - 09:33'
-  ];
-  const [selectedTime, setSelectedTime] = useState(appointmentHours[0]);
+const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
+  const dispatch = useDispatch();
+  const [selectedTime, setSelectedTime] = useState();
   const [openModal, setOpenModal] = useState(false);
   const doctor = useSelector((state) => state.doctor.single_data.data);
+  console.log(selectedTime, 'selectedTime');
 
   const selectedPatientData = useSelector(
     (state) => state.user.selectedPatient
@@ -329,11 +284,29 @@ const CalendarRightSideBar = ({ loading }) => {
   const selectedWorkDayData = useSelector(
     (state) => state.user.selectedWorkDay
   );
+  const handleAfterSubmit = async () => {
+    return new Promise((res, rej) => {
+      dispatch(
+        getDoctorWorkDays({
+          id: doctor.doctor_id,
+          month: getMonth(viewDate) + 1,
+          year: getYear(viewDate)
+        })
+      ).then(() => {
+        res();
+      });
+    });
+  };
+
+  const appointmentHours =
+    slots && selectedWorkDayData
+      ? slots[format(new Date(selectedWorkDayData.date), 'yyyy-MM-dd')]
+      : [];
 
   return (
     <>
       <List disablePadding className="border-l border-primary w-full h-full">
-        {appointmentHours.map((hour, index) => (
+        {appointmentHours?.map((hour) => (
           <>
             <ListItemButton
               key={hour}
@@ -345,7 +318,10 @@ const CalendarRightSideBar = ({ loading }) => {
             >
               <ListItemText primary={hour} />
             </ListItemButton>
-            <Divider key={hour + index} sx={{ borderColor: 'primary.main' }} />
+            <Divider
+              key={`${hour} divider `}
+              sx={{ borderColor: 'primary.main' }}
+            />
           </>
         ))}
         <Stack direction="row" alignItems="center" justifyContent="center">
@@ -384,7 +360,8 @@ const CalendarRightSideBar = ({ loading }) => {
           onClose: () => {
             setOpenModal(false);
           },
-          selectedTime
+          selectedTime,
+          handleAfterSubmit
         }}
       />
     </>
