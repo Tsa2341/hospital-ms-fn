@@ -408,9 +408,8 @@ const HomeNavBar = (props) => {
             <IconButton
               color="primary"
               aria-label="open drawer"
-              edge="end"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+              sx={{ display: { sm: 'none' } }}
             >
               <FaIcons.FaBars />
             </IconButton>
