@@ -11,11 +11,10 @@ const initialState = {
 export const makeDepartment = createAsyncThunk(
   'department/add',
   async (data) => {
-    const response = await axiosInstance
+    await axiosInstance
       .post(`${process.env.BACKEND_URL}/department`, data)
       .then((res) => {
         toast.success('successfully added department');
-        res.data;
       })
       .catch((error) => {
         toast.error(error.response.data.message);
